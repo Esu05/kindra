@@ -1,6 +1,11 @@
-const Page = () => {
+import prisma from '@/lib/db';
+const Page = async () => {
+
+
   return (
-    <div className='font-bold text-rose-300'>Hello Bro!</div>
+    <div>
+      Hello Worlds!
+    </div>
   );
 }
 
