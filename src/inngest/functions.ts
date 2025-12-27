@@ -15,7 +15,16 @@ export const helloWorld = inngest.createFunction(
     const codeAgent = createAgent({
       name: "code-agent",
       system: "You are an expert next.js developer. You write readable, maintainable code. You write simple Next.js & React snippets.",
-      model: openai({ model: "gpt-4o" }),
+      model: openai({ 
+      //model: "mistralai/devstral-2512:free",
+      model: "qwen/qwen3-coder:free",
+      baseUrl: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPENROUTER_API_KEY, 
+      headers: {
+  "HTTP-Referer": "http://localhost:3000",
+  "X-Title": "Kindra Lovable Clone",
+}
+     }as any),
     });
 
     const { output } = await codeAgent.run(
