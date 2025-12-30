@@ -38,7 +38,7 @@ export const ProjectForm = () => {
             queryClient.invalidateQueries(
                 trpc.projects.getMany.queryOptions(),
             );
-            console.log("CREATE PROJECT RESPONSE:", data);
+            
             router.push(`/projects/${data.id}`)
             //todo invalidate usage status
 

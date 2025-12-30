@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { TreeItem } from "@/types";
 import { 
     Collapsible,

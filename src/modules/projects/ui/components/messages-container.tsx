@@ -30,7 +30,7 @@ export const MessagesContainer = ({projectId,
         refetchInterval: 5000,
     }));
 
-     useEffect(() => {
+    useEffect(() => {
         const lastAssistantMessage = messages.findLast((message) => message.role === 'ASSISTANT'
     );
 
@@ -41,8 +41,7 @@ export const MessagesContainer = ({projectId,
         lastAssistantMessageIdRef.current = lastAssistantMessage.id;
     }
 
-     },[messages, setActiveFragment]);
-
+    },[messages, setActiveFragment]);
     useEffect(() =>{
         bottomRef.current?.scrollIntoView();
     },[messages.length]);
