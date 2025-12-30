@@ -3,23 +3,34 @@ import { getQueryClient, trpc } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { Suspense } from "react";
 
+
+
 interface Props {
-    params: Promise<{
+    params:Promise<{
         projectId: string;
-    }>
-};
+    }>;
+}
 
 
 const Page = async ({ params }: Props) => {
     const { projectId } = await params;
 
 const queryClient = getQueryClient();
-void queryClient.prefetchQuery(trpc.messages.getMany.queryOptions({
-    projectId,
-}));
-void queryClient.prefetchQuery(trpc.projects.getOne.queryOptions({
-    id: projectId,
-}));
+
+await Promise.all([
+        queryClient.prefetchQuery(trpc.messages.getMany.queryOptions({
+            projectId,
+        })),
+        queryClient.prefetchQuery(trpc.projects.getOne.queryOptions({
+            id: projectId,
+        }))
+    ]);
+// void queryClient.prefetchQuery(trpc.messages.getMany.queryOptions({
+//     projectId,
+// }));
+// void queryClient.prefetchQuery(trpc.projects.getOne.queryOptions({
+//     id: projectId,
+// }));
 
     return(
         <HydrationBoundary state={dehydrate(queryClient)}>

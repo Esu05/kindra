@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 
 import { EyeIcon, CodeIcon, CrownIcon } from "lucide-react";
 
@@ -13,76 +13,89 @@ import { ProjectHeader } from "../components/project-header";
 import { FragmentWeb } from "../components/fragment-web";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-;
 import { FileExplorer } from "@/components/file-explorer";
 
 interface Props {
     projectId: string;
-};
+}
 
-export const ProjectView = ({ projectId
- }: Props) =>{
-  const[activeFragment, setActiveFragment] = useState<Fragment | null>(null);
-  const [tabState, setTabState] = useState<"preview" | "code">("preview");
+export const ProjectView = ({ projectId }: Props) => {
+    const [activeFragment, setActiveFragment] = useState<Fragment | null>(null);
+    const [tabState, setTabState] = useState<"preview" | "code">("preview");
+    const [mounted, setMounted] = useState(false);
 
-    return(
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return (
+            <div className="h-screen flex items-center justify-center">
+                <p>Loading...</p>
+            </div>
+        );
+    }
+
+    return (
         <div className="h-screen">
             <ResizablePanelGroup orientation="horizontal">
-            <ResizablePanel
-            defaultSize={35}
-            minSize={20}
-            className="flex flex-col min-h-0" 
-            >
-                <Suspense fallback={<p>Loading project...</p>} >
-                <ProjectHeader  projectId={projectId} />
-                </Suspense>
-                <Suspense fallback={<p>Loading Messages...</p>}>
-                <MessagesContainer projectId= {projectId}
-                activeFragment ={activeFragment} 
-                setActiveFragment = {setActiveFragment}
-                />
-                </Suspense>
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel
-            defaultSize={65}
-            minSize={50}
-            >
-                <Tabs
-                className="h-full gap-y-0"
-                defaultValue="preview"
-                value={tabState}
-                onValueChange={(value) => setTabState(value as "preview" | "code")}
+                <ResizablePanel
+                    defaultSize={35}
+                    minSize={20}
+                    className="flex flex-col min-h-0"
                 >
-                <div className="w-full flex items-center p-2 border-b gap-x-2">
-                <TabsList className="h-8 p-0 border rounded-md">
-                    <TabsTrigger value="preview" className="rounded-md">
-                        <EyeIcon /> <span>Demo</span>
-                    </TabsTrigger>
-                    <TabsTrigger value="code" className="rounded-md">
-                        <CodeIcon /> <span>Code</span>
-                    </TabsTrigger>
-            </TabsList>
-            <div className="ml-auto flex items-center gap-x-2">
-                <Button asChild size="sm" variant="default">
-                    <Link href="/pricing">
-                    <CrownIcon /> Upgrade
-                    </Link>
-                </Button>
-            </div>
-            </div>
-            <TabsContent value="preview">
-            {!!activeFragment && <FragmentWeb data ={activeFragment} />}
-            </TabsContent>
-            <TabsContent value="code" className="min-h-0">
-                {!!activeFragment?.files && (
-                    <FileExplorer 
-                    files={activeFragment.files as {[path:string]: string }}
-                    />
-                )}
-            </TabsContent>
-            </Tabs>
-            </ResizablePanel>
+                    <Suspense fallback={<p>Loading project...</p>}>
+                        <ProjectHeader projectId={projectId} />
+                    </Suspense>
+                    <Suspense fallback={<p>Loading Messages...</p>}>
+                        <MessagesContainer
+                            projectId={projectId}
+                            activeFragment={activeFragment}
+                            setActiveFragment={setActiveFragment}
+                        />
+                    </Suspense>
+                </ResizablePanel>
+                <ResizableHandle className="hover:bg-primary transition-colors" />
+                <ResizablePanel
+                    defaultSize={65}
+                    minSize={50}
+                    className="flex flex-col min-h-0"
+                >
+                    <Tabs
+                        className="h-full gap-y-0"
+                        defaultValue="preview"
+                        value={tabState}
+                        onValueChange={(value) => setTabState(value as "preview" | "code")}
+                    >
+                        <div className="w-full flex items-center p-2 border-b gap-x-2">
+                            <TabsList className="h-8 p-0 border rounded-md">
+                                <TabsTrigger value="preview" className="rounded-md">
+                                    <EyeIcon className="size-4" /> <span>Demo</span>
+                                </TabsTrigger>
+                                <TabsTrigger value="code" className="rounded-md">
+                                    <CodeIcon className="size-4" /> <span>Code</span>
+                                </TabsTrigger>
+                            </TabsList>
+                            <div className="ml-auto flex items-center gap-x-2">
+                                <Button asChild size="sm" variant="default">
+                                    <Link href="/pricing">
+                                        <CrownIcon className="size-4" /> Upgrade
+                                    </Link>
+                                </Button>
+                            </div>
+                        </div>
+                        <TabsContent value="preview" className="flex-1">
+                            {!!activeFragment && <FragmentWeb data={activeFragment} />}
+                        </TabsContent>
+                        <TabsContent value="code" className="min-h-0 flex-1">
+                            {!!activeFragment?.files && (
+                                <FileExplorer
+                                    files={activeFragment.files as { [path: string]: string }}
+                                />
+                            )}
+                        </TabsContent>
+                    </Tabs>
+                </ResizablePanel>
             </ResizablePanelGroup>
         </div>
     );

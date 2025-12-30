@@ -1,12 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import { TreeItem } from "@/types";
-import { Collapsible,
-     CollapsibleContent,
-     CollapsibleTrigger
-    } from "./ui/collapsible";
+import { 
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger
+} from "./ui/collapsible";
 import { 
     Sidebar, 
     SidebarContent, 
-    SidebarGroup, SidebarGroupContent,
+    SidebarGroup, 
+    SidebarGroupContent,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -20,7 +25,7 @@ interface TreeViewProps {
     data: TreeItem[];
     value?: string | null;
     onSelect?: (value: string) => void;
-};
+}
 
 export const TreeView = ({
     data,
@@ -36,11 +41,11 @@ export const TreeView = ({
                             <SidebarMenu>
                                 {data.map((item, index) => (
                                     <Tree 
-    key={index}
-    item={item}
-    selectedValue={value}
-    onSelect={onSelect} 
-    parentPath=""                               
+                                        key={index}
+                                        item={item}
+                                        selectedValue={value}
+                                        onSelect={onSelect} 
+                                        parentPath=""                               
                                     />
                                 ))}
                             </SidebarMenu>
@@ -50,7 +55,7 @@ export const TreeView = ({
                 <SidebarRail />
             </Sidebar>
         </SidebarProvider>
-    )
+    );
 };
 
 interface TreeProps {
@@ -58,55 +63,58 @@ interface TreeProps {
     selectedValue?: string | null;
     onSelect?: (value: string) => void;
     parentPath: string;
-};
+}
 
-const Tree = ({item, selectedValue, onSelect, parentPath}: TreeProps) => {
+const Tree = ({ item, selectedValue, onSelect, parentPath }: TreeProps) => {
     const [name, ...items] = Array.isArray(item) ? item : [item];
     const currentPath = parentPath ? `${parentPath}/${name}` : name;
 
-    if(!items.length){
-        //It's a file
+    if (!items.length) {
+        // It's a file
         const isSelected = selectedValue === currentPath;
 
         return (
-            <SidebarMenuButton isActive={isSelected}
-            className="data-[active=true]: bg-transparent"
-            onClick={() => onSelect?.(currentPath)}
-            >
-                <FileIcon />
-                <span className="truncate">
-                    {name}
-                </span>
-            </SidebarMenuButton>
-        )
+            <SidebarMenuItem>
+                <SidebarMenuButton 
+                    isActive={isSelected}
+                    className="data-[active=true]:bg-accent data-[active=true]:text-accent-foreground"
+                    onClick={() => onSelect?.(currentPath)}
+                >
+                    <FileIcon className="size-4" />
+                    <span className="truncate">
+                        {name}
+                    </span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        );
     }
 
-    //It's a folder
+    // It's a folder
     return (
         <SidebarMenuItem>
             <Collapsible
-            className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
-            defaultOpen
+                className="group/collapsible [&[data-state=open]>button>svg:first-child]:rotate-90"
+                defaultOpen
             >
                 <CollapsibleTrigger asChild>
-                <SidebarMenuButton>
-                    <ChevronRightIcon className="transition-transform"/>
-                    <FolderIcon />
-                    <span className="truncate">{name}</span>
-                </SidebarMenuButton>
+                    <SidebarMenuButton>
+                        <ChevronRightIcon className="size-4 transition-transform" />
+                        <FolderIcon className="size-4" />
+                        <span className="truncate">{name}</span>
+                    </SidebarMenuButton>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                <SidebarMenuSub>
-                    {items.map((subItem, index) => (
-                        <Tree 
-                        key={index}
-                        item={subItem}
-                        selectedValue={selectedValue}
-                        onSelect={onSelect}
-                        parentPath={currentPath}
-                        />
-                    ))}
-                </SidebarMenuSub>
+                    <SidebarMenuSub>
+                        {items.map((subItem, index) => (
+                            <Tree 
+                                key={index}
+                                item={subItem}
+                                selectedValue={selectedValue}
+                                onSelect={onSelect}
+                                parentPath={currentPath}
+                            />
+                        ))}
+                    </SidebarMenuSub>
                 </CollapsibleContent>
             </Collapsible>
         </SidebarMenuItem>
