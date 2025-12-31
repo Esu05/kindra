@@ -12,14 +12,14 @@ const Page = () => {
         <div className="flex flex-col items-center">
           <Image
           src="/logo.svg"
-          alt="vibe"
-          width={50}
-          height={50}
+          alt="BumbleBee"
+          width={95}
+          height={95}
           className="hidden md:block"
           />
         </div>
         <h1 className='text-2xl md:text-5xl font-bold text-center text-rose-400'>
-          Build something with Kindra
+          Build something with BumbleBee
         </h1>
         <p className='text-lg md:text-xl text-muted-foreground text-center'>
           Create apps and websites in fun way with AI.
