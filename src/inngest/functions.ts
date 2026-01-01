@@ -21,6 +21,7 @@ export const codeAgentFunction = inngest.createFunction(
   { event: "code-agent/run" },
   async ({ event, step }) => {
     let sandboxId: string | null = null;
+    const TIMEOUT_MS = 300_000; // 5 minute timeout
 
     try {
       sandboxId = await step.run("get-sandbox-id", async () => {
@@ -170,7 +171,7 @@ export const codeAgentFunction = inngest.createFunction(
             }
             return result;
           },
-        }
+        },
       });
 
       const network = createNetwork<AgentState>({
@@ -187,8 +188,13 @@ export const codeAgentFunction = inngest.createFunction(
         },
       });
 
-      const result = await network.run(event.data.value, { state });
-
+      const result = await Promise.race<ReturnType<typeof network.run>>([
+  network.run(event.data.value, { state }),
+  new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error("Agent timed out")), TIMEOUT_MS)
+  ),
+]);
+       
       // Check if generation failed
       const isError = !result.state.data.summary ||
         Object.keys(result.state.data.files || {}).length === 0;
