@@ -13,7 +13,7 @@ interface UserMessageProps {
 const UserMessage = ({ content }: UserMessageProps ) => {
     return(
         <div className="flex justify-end pb-4 pr-2 pl-10">
-            <Card className="rounded-lg bg-muted p-3 shdow-none border-none max-w-[80%] wrap-break-word">
+            <Card className="rounded-lg bg-muted p-3 shadow-none border-none max-w-[80%] wrap-break-word">
                 {content}
             </Card>
         </div>
@@ -75,7 +75,7 @@ return(
         <div className="flex items-center gap-2 pl-2 mb-2">
             <Image 
             src="/logo.svg"
-            alt="kindra"
+            alt="BumbleBee"
             width={25}
             height={25}
             className="shrink-0"
@@ -85,7 +85,8 @@ return(
                 {format(createdAt, "HH:mm 'on' MMM dd, yyyy")}
             </span>
         </div>
-        <div className="pl-9 flex flex-col gap-y-4">            <span>{content}</span>
+        <div className="pl-9 flex flex-col gap-y-4">      
+                  <span>{content}</span>
             {fragment && type === "RESULT" && (
                 <FragmentCard 
                 fragment= {fragment}

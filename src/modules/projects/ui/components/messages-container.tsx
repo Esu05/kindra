@@ -47,7 +47,21 @@ export const MessagesContainer = ({projectId,
     },[messages.length]);
 
     const lastMessage = messages[messages.length-1];
-    const isLastMessageUSer = lastMessage?.role==="USER";
+    //const isLastMessageUSer = lastMessage?.role==="USER";
+    const lastUserMessage = [...messages].reverse().find(
+  (m) => m.role === "USER"
+);
+
+const lastAssistantMessage = [...messages].reverse().find(
+  (m) => m.role === "ASSISTANT"
+);
+
+const isGenerating =
+  Boolean(lastUserMessage &&
+  (!lastAssistantMessage ||
+    new Date(lastAssistantMessage.createdAt) <
+      new Date(lastUserMessage.createdAt)))
+
     return(
         <div className="flex flex-col flex-1 min-h-0">
             <div className="flex-1 min-h-0 overflow-y-auto">
@@ -63,7 +77,8 @@ export const MessagesContainer = ({projectId,
                         type={message.type}
                         />
                     ))}
-                    {isLastMessageUSer && <MessageLoading />}
+                    {isGenerating && <MessageLoading />}
+                    
                     <div ref={bottomRef} />
                 </div>
             </div>
