@@ -73,7 +73,7 @@ export const codeAgentFunction = inngest.createFunction(
           apiKey: process.env.OPENROUTER_API_KEY,
           headers: {
             "HTTP-Referer": "http://localhost:3000",
-            "X-Title": "Kindra Lovable Clone",
+            "X-Title": "Bumblebee Lovable Clone",
           },
           temperature: 0.1,
         } as any),
@@ -256,7 +256,8 @@ export const codeAgentFunction = inngest.createFunction(
         description: "An expert response generator",
         system: RESPONSE_PROMPT,
         model: openai({
-          model: "mistralai/mistral-7b-instruct:free",
+          //model: "mistralai/mistral-7b-instruct:free",
+          model: "mistralai/mistral-small-3.1-24b-instruct:free",
           baseUrl: "https://openrouter.ai/api/v1",
           apiKey: process.env.OPENROUTER_API_KEY,
         })
