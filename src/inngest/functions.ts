@@ -68,7 +68,7 @@ export const codeAgentFunction = inngest.createFunction(
         description: "An expert coding agent",
         system: PROMPT,
         model: openai({
-          model: "mistralai/devstral-2512:free",
+          model: "google/gemini-3.1-flash-lite-preview",
           baseUrl: "https://openrouter.ai/api/v1",
           apiKey: process.env.OPENROUTER_API_KEY,
           headers: {
