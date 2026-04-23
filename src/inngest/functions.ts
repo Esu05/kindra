@@ -257,7 +257,7 @@ export const codeAgentFunction = inngest.createFunction(
         system: RESPONSE_PROMPT,
         model: openai({
           //model: "mistralai/mistral-7b-instruct:free",
-          model: "google/gemma-4-31b-it:free",
+          model: "qwen/qwen3-next-80b-a3b-instruct:free",
           baseUrl: "https://openrouter.ai/api/v1",
           apiKey: process.env.OPENROUTER_API_KEY,
         })
